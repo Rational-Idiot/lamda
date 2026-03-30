@@ -216,6 +216,45 @@ char *fresh_var() {
   return strdup(buf);
 }
 
+int decode_church(Node *t) {
+
+  if (t->type != LAMBDA)
+    return -1;
+
+  char *f = t->var;
+
+  Node *inner = t->left;
+
+  if (inner->type != LAMBDA)
+    return -1;
+
+  char *x = inner->var;
+
+  Node *body = inner->left;
+
+  int count = 0;
+
+  while (body->type == APP) {
+
+    Node *left = body->left;
+    Node *right = body->right;
+
+    if (left->type != VAR)
+      return -1;
+
+    if (strcmp(left->var, f) != 0)
+      return -1;
+
+    count++;
+    body = right;
+  }
+
+  if (body->type == VAR && strcmp(body->var, x) == 0)
+    return count;
+
+  return -1;
+}
+
 Node *substitute(Node *t, char *x, Node *v) {
 
   if (t->type == VAR) {
@@ -303,9 +342,14 @@ int main() {
 
   Node *result = normalize(term);
 
-  printf("\nNormal form: ");
-  print_term(result);
-  printf("\n");
+  int n = decode_church(result);
 
+  if (n >= 0) {
+    printf("\nNormal form (Church numeral): %d\n", n);
+  } else {
+    printf("\nNormal form: ");
+    print_term(result);
+    printf("\n");
+  }
   return 0;
 }
