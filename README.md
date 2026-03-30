@@ -1,4 +1,4 @@
-A lambda calculus interpreter from scratch in C because why not 
+A lambda calculus interpreter from scratch in C because why not
 
 Try equations of the form
 
@@ -15,4 +15,39 @@ Reduction:
  -> y
 
 Normal form: y
+```
+
+Church Numerals
+
+```bash
+Lambda> (\n.\f.\x.f (n f x)) (\f.\x.f (f x))
+
+Parsed: ((\n.(\f.(\x.(f ((n f) x))))) (\f.(\x.(f (f x)))))
+
+Reduction:
+ -> (\f.(\x.(f (((\f.(\x.(f (f x)))) f) x))))
+ -> (\f.(\x.(f ((\x.(f (f x))) x))))
+ -> (\f.(\x.(f (f (f x)))))
+
+Normal form (Church numeral): 3
+```
+
+Church Encoded Booleans
+
+```bash
+Lambda> (\x.\y.x)
+
+Parsed: (\x.(\y.x))
+
+Reduction:
+
+Normal form: TRUE
+
+Lambda> (\x.\y.y)
+
+Parsed: (\x.(\y.y))
+
+Reduction:
+
+Normal form: FALSE
 ```
