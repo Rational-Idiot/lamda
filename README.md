@@ -51,3 +51,5 @@ Reduction:
 
 Normal form: FALSE
 ```
+
+Try the Y combinator yourslef - (\f.(\x.f (x x)) (\x.f (x x))) g
