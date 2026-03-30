@@ -220,22 +220,17 @@ int decode_numrals(Node *t) {
 
   if (t->type != LAMBDA)
     return -1;
-
   char *f = t->var;
-
   Node *inner = t->left;
 
   if (inner->type != LAMBDA)
     return -1;
 
   char *x = inner->var;
-
   Node *body = inner->left;
-
   int count = 0;
 
   while (body->type == APP) {
-
     Node *left = body->left;
     Node *right = body->right;
 
@@ -334,11 +329,8 @@ Node *reduce(Node *t, int *changed) {
 }
 
 Node *normalize(Node *t) {
-
   while (1) {
-
     int changed = 0;
-
     t = reduce(t, &changed);
 
     if (!changed)
@@ -355,7 +347,6 @@ Node *normalize(Node *t) {
 int main() {
 
   char input[2048];
-
   printf("Lambda> ");
   fgets(input, sizeof(input), stdin);
 
