@@ -242,7 +242,7 @@ Node *substitute(Node *t, char *x, Node *v) {
   return t;
 }
 
-Node *reduce(Node *t) {
+Node *reduce(Node *t, int *changed) {
 
   if (t->type == APP) {
 
@@ -252,16 +252,16 @@ Node *reduce(Node *t) {
       char *param = t->left->var;
       Node *arg = t->right;
 
+      *changed = 1;
       return substitute(copy(body), param, arg);
     }
 
-    t->left = reduce(t->left);
-    t->right = reduce(t->right);
+    t->left = reduce(t->left, changed);
+    t->right = reduce(t->right, changed);
   }
 
-  if (t->type == LAMBDA) {
-    t->left = reduce(t->left);
-  }
+  if (t->type == LAMBDA)
+    t->left = reduce(t->left, changed);
 
   return t;
 }
@@ -270,18 +270,16 @@ Node *normalize(Node *t) {
 
   while (1) {
 
-    Node *before = copy(t);
-    t = reduce(t);
+    int changed = 0;
+
+    t = reduce(t, &changed);
+
+    if (!changed)
+      break;
 
     printf(" -> ");
     print_term(t);
     printf("\n");
-
-    if (before == t)
-      break;
-
-    if (t->type != APP && t->type != LAMBDA)
-      break;
   }
 
   return t;
