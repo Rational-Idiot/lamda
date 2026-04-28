@@ -53,3 +53,31 @@ Normal form: FALSE
 ```
 
 Try the Y combinator yourslef - (\f.(\x.f (x x)) (\x.f (x x))) g
+
+You can now also run the Typed Lambda calculus interpreter `lamdaty.c`
+
+run `make typed` or `gcc -Wall -Wextra lamdaty.c -o lamdaty -lm` to build it
+
+```bash
+STLC> \lambda x : Type . body
+```
+
+This can do cool things like
+
+```bash
+STLC> (\f:Bool->Bool. \g:Bool->Bool. \x:Bool. f (g x))
+        (\b:Bool. b)
+        (\b:Bool. b)
+        true
+Parsed: (\f:(Bool -> Bool).(\g:(Bool -> Bool).(\x:Bool.(f (g x)))))
+Type: ((Bool -> Bool) -> ((Bool -> Bool) -> (Bool -> Bool)))
+
+Reduction:
+
+Normal form: (\f:(Bool -> Bool).(\g:(Bool -> Bool).(\x:Bool.(f (g x)))))
+Type preserved: ((Bool -> Bool) -> ((Bool -> Bool) -> (Bool -> Bool)))
+```
+
+{Type checking and preservation}
+
+We can now easily extend this to a proper funcitonal language
